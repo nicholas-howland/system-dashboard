@@ -18,7 +18,7 @@ openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
 Install the virtual environment
 ```bash
 # make sure the virutal environment is installed
-apt install python3-venv
+sudo apt install python3-venv -y
 # create a new venv
 python3 -m venv venv
 # activate the venv
