@@ -16,13 +16,16 @@ Install the virtual environment
 sudo mkdir /opt/system-dashboard/
 sudo chown $USER /opt/system-dashboard
 cd /opt/system-dashboard
-# make sure we have the dependencies installed
-sudo apt install python3-venv -y
 
 # grab the repository and rename it
 wget https://github.com/nicholas-howland/system-dashboard/archive/refs/heads/main.zip
 unzip main.zip
-mv system-dashboard-main system-dashboard
+mv system-dashboard-main/* ./
+rmdir system-dashboard-main
+
+# make sure we have the dependencies installed
+sudo apt install python3-venv -y
+
 
 
 # create a new venv, activate it and install the requirements, then deactivate it for now...
@@ -56,7 +59,7 @@ sed "s/USER/$USER/" system-dashboard.service | sudo tee /etc/systemd/system/syst
 sudo systemctl daemon-reload
 sudo systemctl enable system-dashboard
 sudo systemctl start system-dashboard
-
+systemctl status system-dashboard
 
 ```
 
