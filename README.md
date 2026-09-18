@@ -1,6 +1,10 @@
 # System Dashboard
-Very simple system dashboard application for at a glance measuring of current system load and network connections. Pair programmed with Gemini
+Very simple system dashboard application for at a glance measuring of current system load and network connections. 
+- Displays Current system load, top 10 processes, and all of the network connections
+- All data is available via JSON data api
+- Uses HTTPS for data confidentiality, and http basic auth for authorization
 
+Application pair programmed with Gemini, installation documents and process solidification completed independently.
 
 ## Installation
 
@@ -17,23 +21,40 @@ openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
 
 Install the virtual environment
 ```bash
-# make sure the virutal environment is installed
+# create the installation directory
+sudo mkdir /opt/system-dashboard/
+sudo chown $USER /opt/system-dashboard
+cd /opt/system-dashboard
+# make sure we have the dependencies installed
 sudo apt install python3-venv -y
-# create a new venv
+
+# grab the repository and rename it
+wget https://github.com/nicholas-howland/system-dashboard/archive/refs/heads/main.zip
+unzip main.zip
+mv system-dashboard-main system-dashboard
+
+
+# create a new venv, activate it and install the requirements, then deactivate it for now...
 python3 -m venv venv
-# activate the venv
 source venv/bin/activate
-# install the requirements
 pip install -r requirements.txt
-# deactivate the virtual environment for now...
 deactivate
 ```
 
 ## Starting the Server
-This will start the server on port 5000 after activating the virtual environment.
+This will start the server on port 5000 over https, if you have errors here its because dependencies were not installed or the tls certificate was not generated. Generate the certificate
 ```bash
-# activate the virtual environment once again
+# activate the virtual environment once again and start the applicaiton
 source venv/bin/activate
-# start the applicaiton
 python3 ./app.py
 ```
+
+## Installing the Server
+If you want to make the server persistant at startup, putting it inside of a systemd process can be done like so.
+```bash
+cp
+
+```
+
+
+
