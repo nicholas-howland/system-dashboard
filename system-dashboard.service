@@ -1,6 +1,7 @@
 [Unit]
 Description=System Montior Web UI
-After=network.target
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 User=USER
@@ -8,6 +9,7 @@ WorkingDirectory=/opt/system-dashboard
 Environment="PATH=/opt/system-dashboard/venv/bin"
 ExecStart=/opt/system-dashboard/venv/bin/python3 /opt/system-dashboard/app.py
 Restart=on-failure
+RestartSec=5s
 StandardOutput=/opt/system-dashboard/log.txt
 StandardError=/opt/system-dashboard/error.txt
 
