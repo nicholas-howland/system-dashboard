@@ -109,7 +109,7 @@ def index():
     metrics = get_system_metrics()
     return render_template("index.html", metrics=metrics)
 # uncomment if you have downloaded chartjs locally, not reccomended generally
-# curl https://cdn.jsdelivr.net/npm/chart.js
+# wget https://cdn.jsdelivr.net/npm/chart.js
 #@app.route("/chart.js")
 #def chartjs():
 #    return render_template("chart.js")
