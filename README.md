@@ -11,9 +11,9 @@ Application pair programmed with Gemini, installation documents and process soli
 Self signed certificate generation
 ```bash
 openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
-  -keyout system-monitor.key -out system-monitor.crt -days 365 -noenc \
-  -subj "/CN=system-monitor.local" \
-  -addext "subjectAltName=DNS:localhost,DNS:system-monitor.local,IP:127.0.0.1" \
+  -keyout system-dashboard.key -out system-dashboard.crt -days 365 -noenc \
+  -subj "/CN=system-dashboard.local" \
+  -addext "subjectAltName=DNS:localhost,DNS:system-dashboard.local,IP:127.0.0.1" \
   -addext "basicConstraints=critical,CA:FALSE" \
   -addext "keyUsage=critical,digitalSignature,keyEncipherment" \
   -addext "extendedKeyUsage=serverAuth"
@@ -52,7 +52,11 @@ python3 ./app.py
 ## Installing the Server
 If you want to make the server persistant at startup, putting it inside of a systemd process can be done like so.
 ```bash
-cp
+sudo cp /opt/system-dashboard.service /etc/systemd/system/system-dashboard.service
+sudo systemctl daemon-reload
+sudo systemctl enable system-dashboard
+sudo systemctl start system-dashboard
+
 
 ```
 
