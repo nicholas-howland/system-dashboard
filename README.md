@@ -52,7 +52,7 @@ python3 ./app.py
 ## Installing the Server
 If you want to make the server persistant at startup, putting it inside of a systemd process can be done like so.
 ```bash
-sudo cp /opt/system-dashboard.service /etc/systemd/system/system-dashboard.service
+sed "s/USER/$USER/" system-dashboard.service | sudo tee /etc/systemd/system/system-dashboard.service
 sudo systemctl daemon-reload
 sudo systemctl enable system-dashboard
 sudo systemctl start system-dashboard
