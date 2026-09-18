@@ -8,16 +8,7 @@ Application pair programmed with Gemini, installation documents and process soli
 
 ## Installation
 
-Self signed certificate generation
-```bash
-openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
-  -keyout system-dashboard.key -out system-dashboard.crt -days 365 -noenc \
-  -subj "/CN=system-dashboard.local" \
-  -addext "subjectAltName=DNS:localhost,DNS:system-dashboard.local,IP:127.0.0.1" \
-  -addext "basicConstraints=critical,CA:FALSE" \
-  -addext "keyUsage=critical,digitalSignature,keyEncipherment" \
-  -addext "extendedKeyUsage=serverAuth"
-```
+
 
 Install the virtual environment
 ```bash
@@ -40,7 +31,16 @@ source venv/bin/activate
 pip install -r requirements.txt
 deactivate
 ```
-
+Self signed certificate generation
+```bash
+openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
+  -keyout system-dashboard.key -out system-dashboard.crt -days 365 -noenc \
+  -subj "/CN=system-dashboard.local" \
+  -addext "subjectAltName=DNS:localhost,DNS:system-dashboard.local,IP:127.0.0.1" \
+  -addext "basicConstraints=critical,CA:FALSE" \
+  -addext "keyUsage=critical,digitalSignature,keyEncipherment" \
+  -addext "extendedKeyUsage=serverAuth"
+```
 ## Starting the Server
 This will start the server on port 5000 over https, if you have errors here its because dependencies were not installed or the tls certificate was not generated. Generate the certificate
 ```bash
