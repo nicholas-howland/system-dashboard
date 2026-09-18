@@ -14,7 +14,8 @@ app.config["BASIC_AUTH_FORCE"] = True
 basic_auth = BasicAuth(app)
 
 BOOT_TIME = psutil.boot_time()
-
+last_net_io = psutil.net_io_counters()
+last_time = time.time()
 
 def get_top_processes(limit=10):
     processes = []
@@ -60,8 +61,31 @@ def get_network_connections():
 
 
 def get_system_metrics():
+    global last_net_io, last_time
     uptime_seconds = time.time() - BOOT_TIME
     uptime_string = str(datetime.timedelta(seconds=int(uptime_seconds)))
+
+
+    # Calculate network speed (MB/s)
+    current_net_io = psutil.net_io_counters()
+    current_time = time.time()
+
+    time_delta = current_time - last_time
+    # Prevent division by zero if updates happen instantly
+    if time_delta <= 0:
+        time_delta = 1
+
+    bytes_sent_per_sec = (current_net_io.bytes_sent - last_net_io.bytes_sent) / time_delta
+    bytes_recv_per_sec = (current_net_io.bytes_recv - last_net_io.bytes_recv) / time_delta
+
+    # Convert to Megabytes per second (MB/s)
+    mb_sent = round(bytes_sent_per_sec / (1024 *1024), 2)
+    mb_recv = round(bytes_recv_per_sec / (1024 *1024), 2)
+
+    # Update global states for the next interval
+    last_net_io = current_net_io
+    last_time = current_time
+
 
     return {
         "cpu_usage": psutil.cpu_percent(interval=None),
@@ -75,6 +99,8 @@ def get_system_metrics():
         "uptime": uptime_string,
         "processes": get_top_processes(10),
         "connections": get_network_connections(),
+        "net_sent": mb_sent,
+        "net_recv": mb_recv,
     }
 
 
@@ -82,6 +108,11 @@ def get_system_metrics():
 def index():
     metrics = get_system_metrics()
     return render_template("index.html", metrics=metrics)
+# uncomment if you have downloaded chartjs locally, not reccomended generally
+# curl https://cdn.jsdelivr.net/npm/chart.js
+#@app.route("/chart.js")
+#def chartjs():
+#    return render_template("chart.js")
 
 
 @app.route("/api/metrics")
